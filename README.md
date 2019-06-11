@@ -11,6 +11,8 @@ This is a [circom](https://github.com/iden3/circom) and [snarkjs](https://github
 3. Install npm packages in both the root repository and the submodule: `npm i`
 
 ## Exercises
+### Simple arithmetic constraints
+
 ### Verifying an EdDSA signature
 
 ### Verifying a Merkle proof
