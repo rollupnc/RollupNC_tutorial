@@ -278,3 +278,59 @@ Processing multiple transactions requires us to update the `accounts_root` many 
 Check out https://github.com/therealyingtong/RollupNC/blob/master/snark_circuit/multiple_tokens_transfer_and_withdraw.circom to see how it was implemented.
 
 ## If conditions and comparators
+## If conditions and comparators
+
+Although circom's parser (see parser/jaz.jison) supports `if` statements, because circom compiles the DSL into 
+arithmetic circuits, circuits whose behavior *depends* on the value of an input can have unexpected behavior.
+
+For example, consider the following example
+
+```
+template BadForceEqualIfEnabled() {
+    signal input enabled;
+    signal input in[2];
+
+    if (enabled) {
+        in[1] === in[0]
+    }
+}
+
+component main BadForceEqualIfEnabled()
+```
+
+First compile the circuit:
+`circom circuit.circom -o circuit.json`
+
+`snarkjs setup --protocol groth`
+
+
+Create the `input.json` file:
+
+```
+{"enabled": 0, "in": [1,2]} 
+```
+
+`snarkjs calculatewitness`
+
+Now, in witness.json,
+change the enabled flag (the second array element) to 1. 
+(If it was set in the 
+previous step the compiler will not calculate a witness because 
+it sees a constraint that cannot be satisfied.)
+
+`snarkjs proof`
+
+`snarkjs verify`
+
+Should get INVALID - we get OK in the bad case.
+
+As an exercise, implement the circuit properly
+(or refer to circuits/circomlib/comparators.circom).
+
+
+
+
+
+
+{"enabled": 0, "in": [1,2]}
+
