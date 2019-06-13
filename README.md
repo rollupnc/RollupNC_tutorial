@@ -11,6 +11,7 @@ This is a [circom](https://github.com/iden3/circom) and [snarkjs](https://github
     + [Verifying an EdDSA signature](#verifying-an-eddsa-signature)
       - [Challenge](#challenge-1)
     + [Verifying a Merkle proof](#verifying-a-merkle-proof)
+      - [Challenge](#challenge-2)
     + [Processing a single transaction](#processing-a-single-transaction)
     + [Processing multiple transactions](#processing-multiple-transactions)
   * [If conditions and comparators](#if-conditions-and-comparators)
@@ -247,6 +248,9 @@ Make sure to REMOVE `component main = GetMerkleRoot(2)` from `get_merkle_root.ci
 
 Modify your input to work with `leaf_existence.circom`.
 
+#### Challenge
+Provide the preimage of the leaf hash as private inputs in `leaf_existence.circom`, and hash them in the circuit.
+
 ### Processing a single transaction
 Let's define a transaction as:
 
@@ -265,12 +269,15 @@ class Account = {
     balance: integer
 }
 ```
+NB: we also have a nonce for protection against replay attacks, but for simplicity let's consider it in the next example.
+
 In RollupNC, processing a single transaction involves:
-- checking that the hash of the transaction exists in `tx_root`
 - checking that the sender and receiver accounts exist in a tree of accounts, `accounts_root`
 - checking that the hash of the transaction was signed by the sender
 - debiting the sender account
+- updating the `accounts_root`
 - crediting the receiver account
+- updating the `accounts_root`
 
 ### Processing multiple transactions
 Processing multiple transactions requires us to update the `accounts_root` many times before we arrive at the final one. This means we have to pre-compute all the `intermediate_roots` and pass them to the circuit to use in validating Merkle proofs.

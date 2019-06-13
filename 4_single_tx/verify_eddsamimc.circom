@@ -2,9 +2,6 @@ include "../circomlib/circuits/eddsamimc.circom";
 include "../circomlib/circuits/mimc.circom";
 
 template VerifyEdDSAMiMC(k) {
-
-    // k is length of preimage
-
     signal input from_x;
     signal input from_y;
     signal input R8x;
@@ -26,5 +23,3 @@ template VerifyEdDSAMiMC(k) {
     verifier.S <== S;
     verifier.M <== M.out;
 }
-
-component main = VerifyEdDSAMiMC(3);
