@@ -1,23 +1,18 @@
-template SimpleChecks(k) {
-    signal private input a[k];
-    signal private input b[k];
-    signal input c[k];
-    signal private input d[k];
+template SimpleChecks() {
+    signal private input a;
+    signal private input b;
+    signal input c;
+    signal private input d;
     signal output out;
     
-    var sum = 0;
-    for (var i = 0; i < k; i++){
-        // force a + b = c
-        a[i] + b[i] === c[i];
+    // force a + b = c
+    a + b === c;
 
-        // force b * c = d
-        b[i] * c[i] === d[i];
+    // force b * c = d
+    b * c === d;
 
-        // add up c and d arrays
-        sum = sum + c[i] + d[i];
-    }
-    // output sum of c and d arrays
-    out <== sum;
+    // output c + d
+    out <== c + d;
 }
 
-component main = SimpleChecks(4);
+component main = SimpleChecks();
