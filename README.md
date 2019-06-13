@@ -22,7 +22,8 @@ This is a [circom](https://github.com/iden3/circom) and [snarkjs](https://github
 0. We are using `node v10.16.0`, which you can possibly install using [nvm](https://github.com/nvm-sh/nvm/blob/master/README.md)
 1. Clone this repo: `git clone https://github.com/therealyingtong/RollupNC_tutorial`
 2. Clone the submodules: `git submodule update --init --recursive`
-3. Install npm packages in both the root repository and the submodule: `npm i`
+- this should clone `circomlib`. We are using v0.0.6 for this tutorial. To make sure we're using the same commit, do `git checkout 77928872169b7179c9eee545afe0a972d15b1e64` in the `circomlib` repository.
+3. Install npm packages in both the root repository and the `circomlib` submodule: `npm i`
 
 NB: there's a circom syntax highlighter in VS code! otherwise one can make do with `C#` highlighting.
 
