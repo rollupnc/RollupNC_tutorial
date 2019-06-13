@@ -94,3 +94,5 @@ component main = SimpleChecks(4);
 ### Processing a single transaction
 
 ### Processing multiple transactions
+
+## If conditions and comparators
