@@ -15,7 +15,7 @@ const inputs = {
     "R8x": signature['R8'][0].toString(),
     "R8y": signature['R8'][1].toString(),
     "S": signature['S'].toString(),
-    "M": M
+    "M": M.toString()
 }
 
 fs.writeFileSync(
