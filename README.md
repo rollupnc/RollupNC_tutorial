@@ -3,6 +3,18 @@ This is a [circom](https://github.com/iden3/circom) and [snarkjs](https://github
 
 (Created for [IC3 2019](https://www.initc3.org/) and inspired by [GuthL's rollup circom tutorial](https://github.com/GuthL/roll_up_circom_tutorial).)
 
+- [RollupNC_tutorial](#rollupnc_tutorial)
+  * [Setting up this tutorial](#setting-up-this-tutorial)
+  * [Exercises](#exercises)
+    + [Simple arithmetic constraints](#simple-arithmetic-constraints)
+      - [Challenge](#challenge)
+    + [Verifying an EdDSA signature](#verifying-an-eddsa-signature)
+      - [Challenge](#challenge-1)
+    + [Verifying a Merkle proof](#verifying-a-merkle-proof)
+    + [Processing a single transaction](#processing-a-single-transaction)
+    + [Processing multiple transactions](#processing-multiple-transactions)
+  * [If conditions and comparators](#if-conditions-and-comparators)
+
 ![](https://i.imgur.com/x1tDlfD.png)
 
 ## Setting up this tutorial
