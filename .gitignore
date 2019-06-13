@@ -1,0 +1,8 @@
+node_modules
+witness.json
+verification_key.json
+proving_key.json
+input.json
+proof.json
+public.json
+circuit.json
