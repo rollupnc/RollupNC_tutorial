@@ -419,7 +419,9 @@ change the enabled flag (the second array element) to 1.
 previous step the compiler will not calculate a witness because 
 it sees a constraint that cannot be satisfied.)
 
-`snarkjs proof`
+`snarkjs setup --protocol groth`
+
+`snarkjs proof --protocol groth`
 
 `snarkjs verify`
 
