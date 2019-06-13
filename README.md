@@ -196,13 +196,71 @@ template GetMerkleRoot(k){
 
 }
 
+component main = GetMerkleRoot(2);
+
 ```
 Try to fill in the second line of the `for` loop using the pattern from the lines before. (The solution is in `sample_get_merkle_root.circom`.)
 
 Now, make the second file `leaf_existence.circom` and paste this in: 
+```
+include "./get_merkle_root.circom";
+
+// checks for existence of leaf in tree of depth k
+
+template LeafExistence(k){
+// k is depth of tree
+
+    signal input leaf; 
+    signal input root;
+    signal input paths2_root_pos[k];
+    signal input paths2_root[k];
+
+    component computed_root = GetMerkleRoot(k);
+    computed_root.leaf <== leaf;
+
+    for (var w = 0; w < k; w++){
+        computed_root.paths2_root[w] <== // assign elements from paths2_root
+        computed_root.paths2_root_pos[w] <== // assign elements from paths2_root_pos
+    }
+
+    // equality constraint: input tx root === computed tx root 
+    root === computed_root.out;
+
+}
+
+component main = LeafExistence(2);
+```
+
+Make sure to REMOVE `component main = GetMerkleRoot(2)` from `get_merkle_root.circom`. 
+
+Modify your input to work with `leaf_existence.circom`.
 
 ### Processing a single transaction
+Let's define a transaction as:
+
+```js
+class Transaction = {
+    from: eddsa_pubkey,
+    to: eddsa_pubkey,
+    amount: integer
+}
+```
+and an account as:
+
+```js
+class Account = {
+    pubkey: eddsa_pubkey,
+    balance: integer
+}
+```
+In RollupNC, processing a single transaction involves:
+- checking that the hash of the transaction exists in `tx_root`
+- checking that the sender and receiver accounts exist in a tree of accounts, `accounts_root`
+- checking that the hash of the transaction was signed by the sender
+- debiting the sender account
+- crediting the receiver account
 
 ### Processing multiple transactions
+Processing multiple transactions requires us to update the `accounts_root` many times before we arrive at the final one. This means we have to pre-compute all the `intermediate_roots` and pass them to the circuit to use in validating Merkle proofs.
 
 ## If conditions and comparators
