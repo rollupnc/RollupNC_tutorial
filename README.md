@@ -11,6 +11,8 @@ This is a [circom](https://github.com/iden3/circom) and [snarkjs](https://github
 2. Clone the submodules: `git submodule update --init --recursive`
 3. Install npm packages in both the root repository and the submodule: `npm i`
 
+NB: there's a circom syntax highlighter in VS code! otherwise one can make do with `C#` highlighting.
+
 ## Exercises
 ### Simple arithmetic constraints
 `cd 1_simple_arithmetic`
@@ -42,8 +44,6 @@ template SimpleChecks() {
 
 component main = SimpleChecks();
 ```
-NB: there's a circom syntax highlighter in VS code! otherwise one can make do with `C#` highlighting.
-TODO: replace if loops with comparator
 
 Compile your circuit `circom circuit.circom -o circuit.json`.
 
