@@ -157,6 +157,49 @@ component main = VerifyEdDSAMiMC(3);
 ```
 
 ### Verifying a Merkle proof
+`cd 3_verify_merkle`
+
+This example shows how to write smaller templates and use them as components in the main circuit. To verify a Merkle proof, we need to take in a leaf and its Merkle root, along with the path from the leaf to the root. Let's break this down into two circuits:
+
+1. `get_merkle_root.circom`: this takes a leaf and a Merkle path and returns the computed Merkle root.
+2. `leaf_existence.circom`: this compares an expected Merkle root with a computed Merkle root.
+
+Create new file named `get_merkle_root.circom` and paste this code in: 
+
+```
+include "../circomlib/circuits/mimc.circom";
+
+template GetMerkleRoot(k){
+// k is depth of tree
+
+    signal input leaf;
+    signal input paths2_root[k];
+    signal input paths2_root_pos[k];
+
+    signal output out;
+
+    // hash of first two entries in tx Merkle proof
+    component merkle_root[k];
+    merkle_root[0] = MultiMiMC7(2,91);
+    merkle_root[0].in[0] <== leaf - paths2_root_pos[0]* (leaf - paths2_root[0]);
+    merkle_root[0].in[1] <== paths2_root[0] - paths2_root_pos[0]* (paths2_root[0] - leaf);
+
+    // hash of all other entries in tx Merkle proof
+    for (var v = 1; v < k; v++){
+        merkle_root[v] = MultiMiMC7(2,91);
+        merkle_root[v].in[0] <== paths2_root[v] - paths2_root_pos[v]* (paths2_root[v] - merkle_root[v-1].out);
+        merkle_root[v].in[1] <== //can you figure this one out?
+    }
+
+    // output computed Merkle root
+    out <== merkle_root[k-1].out;
+
+}
+
+```
+Try to fill in the second line of the `for` loop using the pattern from the lines before. (The solution is in `sample_get_merkle_root.circom`.)
+
+Now, make the second file `leaf_existence.circom` and paste this in: 
 
 ### Processing a single transaction
 
