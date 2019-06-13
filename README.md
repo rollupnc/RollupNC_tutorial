@@ -44,18 +44,19 @@ template SimpleChecks() {
 
 component main = SimpleChecks();
 ```
+NB: there's a circom syntax highlighter in VS code! otherwise one can make do with `C#` highlighting.
 
-Compile your circuit `circom circuit.circom -o circuit.json`.
+- Compile your circuit `circom circuit.circom -o circuit.json`.
 
-Generate your input `node generate_circuit_input.json` (generates `input.json`).
+- Generate your input `node generate_circuit_input.js` (generates `input.json`).
 
-Calculate the witness `snarkjs calculatewitness -c circuit.json -i input.json`. This generates `witness.json`.
+- Calculate the witness `snarkjs calculatewitness -c circuit.json -i input.json`. This generates `witness.json`.
 
-Perform the trusted setup to get your `proving_key.json` and `verification_key.json`: `snarkjs setup -c circuit.json --protocol groth`.
+- Perform the trusted setup to get your `proving_key.json` and `verification_key.json`: `snarkjs setup -c circuit.json --protocol groth`.
 
-Generate the proof `snarkjs proof -w witness.json --pk proving_key.json`. This generates `proof.json` and `public.json`.
+- Generate the proof `snarkjs proof -w witness.json --pk proving_key.json`. This generates `proof.json` and `public.json`.
 
-Verify the proof `snarkjs verify`. 
+- Verify the proof `snarkjs verify`. 
 
 #### Challenge
 Modify the circuit and input to take in length-4 arrays of `a`, `b`, `c`, and `d`, and perform the checks in a `for` loop. Output the sums of `c` and `d` arrays. To get you started:
@@ -88,6 +89,72 @@ component main = SimpleChecks(4);
 
 
 ### Verifying an EdDSA signature
+`cd 2_verify_eddsa`
+
+This example works with useful libraries in `circomlib`. Note: we are using v0.0.6 of `circomlib`. 
+
+Create a new file named `circuit.circom` with the following content:
+
+```
+include "../circomlib/circuits/eddsamimc.circom";
+
+template VerifyEdDSAMiMC() {
+    signal input from_x;
+    signal input from_y;
+    signal input R8x;
+    signal input R8y;
+    signal input S;
+    signal input M;
+    
+    component verifier = EdDSAMiMCVerifier();   
+    verifier.enabled <== 1;
+    verifier.Ax <== from_x;
+    verifier.Ay <== from_y;
+    verifier.R8x <== R8x
+    verifier.R8y <== R8y
+    verifier.S <== S;
+    verifier.M <== M;
+}
+
+component main = VerifyEdDSAMiMC();
+```
+
+Generate your input `node generate_circuit_input.js` (generates `input.json`).
+
+You know the drill from here!
+
+#### Challenge
+Modify the circuit and input to take in a length-3 preimage of the message as a private input, and hash them inside the circuit. To get you started:
+
+```
+include "../circomlib/circuits/eddsamimc.circom";
+include "../circomlib/circuits/mimc.circom";
+
+template VerifyEdDSAMiMC(k) {
+    signal input from_x;
+    signal input from_y;
+    signal input R8x;
+    signal input R8y;
+    signal input S;
+    signal private input preimage[k];
+
+    component M = MultiMiMC7(k,91);
+    M.in[0] <== // the first element of your preimage
+    M.in[1] <== // the second element of your preimage
+    M.in[2] <== // the third element of your preimage
+    
+    component verifier = EdDSAMiMCVerifier();   
+    verifier.enabled <== 1;
+    verifier.Ax <== from_x;
+    verifier.Ay <== from_y;
+    verifier.R8x <== R8x;
+    verifier.R8y <== R8y;
+    verifier.S <== S;
+    verifier.M <== M.out;
+}
+
+component main = VerifyEdDSAMiMC(3);
+```
 
 ### Verifying a Merkle proof
 
