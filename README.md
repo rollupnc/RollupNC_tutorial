@@ -405,9 +405,6 @@ component main BadForceEqualIfEnabled()
 First compile the circuit:
 `circom circuit.circom -o circuit.json`
 
-`snarkjs setup --protocol groth`
-
-
 Create the `input.json` file:
 
 ```
