@@ -19,6 +19,6 @@
   "dependencies": {
     "circom": "0.0.28",
     "markdown-toc": "^1.2.0",
-    "snarkjs": "^0.1.13"
+    "snarkjs": "0.1.13"
   }
 }
